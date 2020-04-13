@@ -70,7 +70,7 @@ def main():
 
         event_name = event['summary']
 
-        if event_name in events_to_delete:
+        if event_name.strip() in events_to_delete:
             print(start, event_name)
             service.events().delete(calendarId='primary', eventId=event.get('id')).execute()
 
