@@ -62,7 +62,9 @@ def main():
     if not events:
         print('No upcoming events found.')
     for event in events:
-        events_to_delete = ['GPR Standup', 'DevOps work handshake between distributed teams',
+        events_to_delete = ['GPR Standup',
+                            'DevOps work handshake between distributed teams',
+                            'Daily Review : PETE Issues',
                             'PETE Deployment call - Business and Technical Review on Production changes']
         start = event['start'].get('dateTime', event['start'].get('date'))
 
