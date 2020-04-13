@@ -22,7 +22,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+SCOPES = ['https://www.googleapis.com/auth/calendar.readonly',
+          'https://www.googleapis.com/auth/calendar.events']
 
 
 def main():
@@ -52,17 +53,24 @@ def main():
 
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
+    print('Getting the upcoming 1000 events')
     events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
+                                        maxResults=1000, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
 
     if not events:
         print('No upcoming events found.')
     for event in events:
+        events_to_delete = ['GPR Standup', 'DevOps work handshake between distributed teams',
+                            'PETE Deployment call - Business and Technical Review on Production changes']
         start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+
+        event_name = event['summary']
+
+        if event_name in events_to_delete:
+            print(start, event_name)
+            service.events().delete(calendarId='primary', eventId=event.get('id')).execute()
 
 
 if __name__ == '__main__':
